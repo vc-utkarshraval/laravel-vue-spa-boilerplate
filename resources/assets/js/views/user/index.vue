@@ -69,6 +69,7 @@
                         </div>
 
                         <h4 class="card-title">User List</h4>
+                        <router-link to="/add-user"><button class="btn badge-info float-right" style="margin-top: -30px">Add User</button></router-link>
                         <h6 class="card-subtitle" v-if="users.total">Total {{users.total}} result found!</h6>
                         <h6 class="card-subtitle" v-else>No result found!</h6>
                         <div class="table-responsive">
@@ -93,6 +94,7 @@
                                         <td v-text="user.email"></td>
                                         <td v-html="getUserStatus(user)"></td>
                                         <td>
+                                            <button class="btn btn-info btn-sm float-left margin-correction" @click.prevent="editUser(user)" data-toggle="tooltip" title="Edit User"><i class="fa fa-pencil"></i></button>
                                             <click-confirm yes-class="btn btn-success" no-class="btn btn-danger">
                                                 <button class="btn btn-danger btn-sm" @click.prevent="deleteUser(user)" data-toggle="tooltip" title="Delete User"><i class="fa fa-trash"></i></button>
                                             </click-confirm>
@@ -157,11 +159,15 @@
             },
             deleteUser(user){
                 axios.delete('/api/v1/user/'+user.id).then(response => {
+                    console.log(response);
                     toastr['success'](response.data.message);
                     this.getUsers();
-                }).catch(error => {
-                    toastr['error'](error.response.data.message);
+                }).catch(response => {
+                    toastr['error'](response.data.message);
                 });
+            },
+            editUser(user){
+                this.$router.push('/user/'+user.id+'/edit');
             },
             getUserStatus(user){
                 if(user.status == 'pending_activation')
@@ -172,7 +178,7 @@
                     return '<span class="label label-danger">Banned</span>';
                 else
                     return;
-            }
+            },
         },
         filters: {
             moment(date) {

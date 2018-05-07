@@ -76,6 +76,20 @@ class UserController extends APIController
     }
 
     /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request)
+    {
+        $input = $request->all();
+
+        $user = $this->user->storeUser($input);
+
+        return $user;
+    }
+
+    /**
      * @param $id
      *
      * @return \Illuminate\Http\JsonResponse
@@ -85,6 +99,33 @@ class UserController extends APIController
         $response = $this->user->deleteUser($id);
 
         return $response;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($id)
+    {
+        $tasks = $this->user->showUser($id);
+
+        return $tasks;
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $id)
+    {
+        $input = $request->all();
+
+        $user = $this->user->updateUser($input, $id);
+
+        return $user;
     }
 
     /**
